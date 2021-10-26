@@ -1,8 +1,9 @@
 // import logo from './logo.svg';
 import './App.css';
-import Navbar from './components/nav';
-import About from './pages/about';
-import Animals from './pages/animals';
+import { Switch, Route } from 'react-router-dom';
+import Navbar from './components/Nav/nav';
+import About from './pages/About/about';
+import Animals from './pages/Animals/animals';
 // import Addanimal from './pages/addanimal';
 
 function App() {
@@ -10,11 +11,11 @@ function App() {
     <div class='App'>
       <Navbar/>
 
-      <About/>
-
-      <Animals/>
-
-      {/* <Addanimal/> */}
+      <Switch>
+      <Route path='/' component={About}/>
+      <Route path='/animals' component={Animals}/>
+      {/* <Route path='/intake-form' component={Addanimal}/> */}
+      </Switch>
     </div>
   )
 }
