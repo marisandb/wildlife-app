@@ -1,7 +1,7 @@
 import express from 'express';
-import { connect } from 'net';
+// import { connect } from 'net';
 const cors=require('cors');
-const mongoose=require('mongoose');
+const { MongoClient } = require('mongodb').MongoClient;
 
 require('dotenv').config();
 
@@ -13,8 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 const uri =process.env.ATLAS_URI;
-mongoose.connect(uri, {useNewUrlParser: true, useCreateIndex: true}
-);
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const connection =mongoose.connection;
 connection.once('open',() => {
