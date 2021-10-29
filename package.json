@@ -1,7 +1,13 @@
 {
+<<<<<<< HEAD
   "name": "client",
   "version": "0.1.0",
   "private": true,
+=======
+  "name": "wildlife-app",
+  "version": "0.1.0",
+  "main": "index.js",
+>>>>>>> ff0063c (front and back end not connect to server or database)
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
@@ -10,13 +16,18 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+<<<<<<< HEAD
     "graphql": "^15.7.0",
+=======
+    "graphql": "^15.7.2",
+>>>>>>> ff0063c (front and back end not connect to server or database)
     "mongoose": "^6.0.12",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router": "^5.2.1",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
+<<<<<<< HEAD
     "web-vitals": "^1.1.2"
   },
   "scripts": {
@@ -24,6 +35,21 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+=======
+    "web-vitals": "^1.1.2",
+  
+  },
+  "scripts": {
+    "start": "node backend/server.js",
+    "server":"nodemon backend/server.js",
+    "client":"npm start --prefix frontend",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "dev": "concurrently\"npm run server\"npm run client\""
+    
+    
+>>>>>>> ff0063c (front and back end not connect to server or database)
   },
   "eslintConfig": {
     "extends": [
@@ -42,5 +68,17 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+<<<<<<< HEAD
   }
 }
+=======
+  },
+  
+
+  "devDependencies": {
+  "concurrently": "^6.3.0",
+  "nodemon": "^2.0.14"
+}
+}
+
+>>>>>>> ff0063c (front and back end not connect to server or database)
