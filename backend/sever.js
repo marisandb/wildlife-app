@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import express from 'express';
 // import { connect } from 'net';
 const cors=require('cors');
@@ -26,7 +25,6 @@ app.listen(port, () =>{
     console.log(`Server is running on port ${port}`);
 
 });
-=======
 // import express from 'express';
 // import { connect } from 'net';
 // const cors=require('cors');
@@ -64,4 +62,3 @@ app.listen(port, () =>{
 // });
 
 // ATLAS_URI=mongodb+src://zimmermanc6588:<Project3>@wildlife.hd29f.mongodb.net/wildlife?retryWrites=true&w=majority
->>>>>>> ff0063c (front and back end not connect to server or database)
