@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 // import './index.css';
 import App from './App';
 import  MongoClient  from 'mongodb';
+import bcrypt from 'bcryptsjs';
 
 const { ApolloServer, gql } = require('apollo-server');
 const dotenv= require('dotenv');
@@ -96,17 +97,35 @@ const resolvers = {
     books: (root, data, context) => books,
 
   },
+//oneway hashing
+  Mutation: {
+    signUp:async (_,{input}, {db})=> {
+      const hashedPassword =bcrypt.hashSync(input.password);
+      const newUser={
+        ...input,
+            pasword:hashedPassword,
+    }
 
-  // Mutation: {
-  //   signUp:()=> {
-  //     console.log()
-
-  //   },
-  //   signIn:()=> {
-
-  //   },
+    // save to datebase
+  const result =await db.collection('Users').insert(user); 
+const  user= result.ops[0]
+  return {
+  user,
+  token:'token'
+}  
+},
+    signIn: async(_,{input},)=> 
+    
+    }
   
 };
+
+User:{
+  id: ({_id, id})=>_id ||id 
+
+ 
+  }
+}
 
 const start =async() => {
   const client = new MongoClient(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
