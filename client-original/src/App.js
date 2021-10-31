@@ -7,7 +7,6 @@ import Animals from './pages/animals';
 
 function App() {
   return (
-    
     <div class='App'>
       <Navbar/>
 

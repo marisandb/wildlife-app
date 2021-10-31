@@ -50,3 +50,8 @@ const context ={
     console.log("MongoDB database connection established successfully");
     
 
+    const start =async() => {
+        const client = new MongoClient(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+        await client.connect();
+        const db=client.db(DB_NAME);
+      
