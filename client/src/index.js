@@ -1,15 +1,28 @@
-import React from 'react';
+// import React from 'react';
 import ReactDOM from 'react-dom';
 // import './index.css';
 import App from './App';
 import  MongoClient  from 'mongodb';
 import bcrypt from 'bcryptsjs';
+import jwt  from 'jsonwebtoken';
 
 const { ApolloServer, gql } = require('apollo-server');
 const dotenv= require('dotenv');
 dotenv.config();
-const {DB_URI,DB_NAME} = process.env;
+const {DB_URI,DB_NAME, JWT_SECERT} = process.env;
 
+//how long they have till they need to relog in
+const getToken =(user)=>jwt.sign({id: user._id}, JWT_SECERT, {expiresIn:'9 hrs'});
+
+const getUsersFromToken =async (token, db)=>{
+  if (!token) {return null}
+
+  const tokenData =jwt.verify(token, JWT_SECERT); 
+  if (!tokenData?.id) {
+    return null;
+  }
+return  await db.collection('Users').findOne({_id:ObjectID(tokenData.id) });
+}
 
 
 
@@ -26,49 +39,54 @@ const typeDefs = gql`
   }
 
   
-// type Mutation{
-//   signUp(input: SignUpInput): AuthUser!
-//   signIn(input: SignInInput): AuthUser!
-// }
+ type Mutation{
+  signUp(input: SignUpInput!): AuthUser!
+   signIn(input: SignInInput!): AuthUser!
 
-// input SignUpInput {
-//   email:String!
-//   password:String!
-//    name:String!
+createwildlifeRecond:WildlifeRecord!
+ }
+ input SignUpInput {
+   email:String!
+   password:String!
+    name:String!
 
-// }
+ }
 
-// input SignInInput{
-//   email: String!
-//   password: String!
-// }
+ input SignInInput{
+   email: String!
+   password: String!
+ }
 
-// type AuthUser {
-//   user:User!
-//   token:String!
-// }
-//  type User {
-//    id: ID!
-//    name: String!
-//    email:String!
-//   }
+ type AuthUser {
+   user:User!
+   token:String!
+ }
+  type User {
+    id: ID!
+    name: String!
+    email:String!
+   }
 
-//   type WildlifeRecord{
-//     Date in:String!
-//     Date found:String!
-//     progress:Float!
-//     users:[User!]!
-//     animals:[Animal!]!
-//   }
+   type WildlifeRecord{
+     Date in:String!
+     Date found:String!
+     progress:Float!
+     
+     users:[User!]!
+     animals:[Animal!]!
+   }
 
-//   type Animal{
-//   id: ID!
-//   content: String!
-//   isCompleted: Boolean!
+   type Animal{
+   id: ID!
+   content: String!
+   isCompleted: Boolean!
 
-//   wildliferecond:WildlifeRecord!
+  type Query{
+    myWildlifeRecord:[WildlifeRecord]!
+    myAnimal:(id:ID!):Animal
+
   
-//   }
+   }
 
 
 # The "Query" type is special: it lists all of the available queries that
@@ -88,16 +106,17 @@ const books = [
   {
     title: 'City of Glass',
     author: 'Paul Auster',
-  },
-];
- // Resolvers define the technique for fetching the types defined in the
-// schema. This resolver retrieves books from the "books" array above.
+  }
+]
+
+ 
+
 const resolvers = {
   Query: {
     books: (root, data, context) => books,
 
   },
-//oneway hashing
+
   Mutation: {
     signUp:async (_,{input}, {db})=> {
       const hashedPassword =bcrypt.hashSync(input.password);
@@ -106,62 +125,64 @@ const resolvers = {
             pasword:hashedPassword,
     }
 
-    // save to datebase
+      
+
   const result =await db.collection('Users').insert(user); 
 const  user= result.ops[0]
   return {
   user,
-  token:'token'
+  token: getToken(user),
 }  
 },
-    signIn: async(_,{input},)=> 
+    signIn: async(_,{input}, {db})=>{
+      const user=await db.collection('User').findOne({email:input.email});
+      const isPasswordCorrect= user && bcrypt.compareSync(input.password, user.password);
     
-    }
+      if (!user || !isPasswordCorrect){
+      throw new Error('Invaild credentials!');
+    }    
   
-};
+    
+    return {
+      user,
+      token: getToken(user),
+    }
+    },
+  
 
-User:{
-  id: ({_id, id})=>_id ||id 
+    
+    
 
- 
-  }
-}
+
+
 
 const start =async() => {
   const client = new MongoClient(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
   await client.connect();
   const db=client.db(DB_NAME);
 
-  const context ={
+
+
+const server = new ApolloServer({ 
+  typeDefs, 
+  resolvers, 
+  context: ({req})=> {
+    const user = await getUserFromToken(req.headers.authorization, db);
+    return{
     db,
-  }
+    user,
+ 
+  },
+});
 
-// The ApolloServer constructor requires two parameters: your schema
-// definition and your set of resolvers.
-const server = new ApolloServer({ typeDefs, resolvers, context });
 
-// The `listen` method launches a web server.
 server.listen().then(({ url }) => {
-  console.log(`🚀 Frontend Server ready at ${url}`);
+  console.log(`🚀  Server ready at ${url}`);
   });
 
-  const connection =client.connection;
-connection.once('open',() => {
-console.log("MongoDB database connection established successfully")
 
-});
 }
+
 start();
 
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-// reportWebVitals();
-ReactDOM.render(
-  // eslint-disable-next-line react/jsx-no-undef
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+}

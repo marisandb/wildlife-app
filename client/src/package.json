@@ -1,7 +1,8 @@
 {
-  "name": "frontend",
+  "name": "wildlife",
   "version": "0.1.0",
-
+  "main": "index.js",
+"type":"module",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
@@ -16,10 +17,11 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "node src/index.js",
+    "build": "webpack --config prod.config.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+   
   },
   "eslintConfig": {
     "extends": [
@@ -32,7 +34,8 @@
       ">0.2%",
       "not dead",
       "not op_mini all"
-    ],
+    ]
+  },
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
