@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {FormControl, FormLabel, Input, Select, RadioGroup, HStack, Radio, Button, Form} from "@chakra-ui/react"
 
 const IntakeForm = () => {
-    const [formState, setFormState] = useState({ numberOfAnimals: '', speciesName: '', speciesAge: '', bts: '' , acPickup:'', circumstance:'', initObservations:'', finderName:'', finderNumber:'', finderAddress:''});
+    const [formState, setFormState] = useState({ numberOfAnimals: '', speciesName: '', speciesAge: '', pickup: '', circumstance:'', initObservations:'', finderName:'', finderNumber:'', finderAddress:''});
   
     // update state based on form Input changes
     const handleChange = (event) => {
@@ -20,27 +20,30 @@ const IntakeForm = () => {
   };
   
 return (
-    <main>
         <div>
             <h4> Intake Form </h4>
-            <Form> 
+            <Form onSubmit={handleFormSubmit}>  
               {/* Animal Intake information */}
-            <FormControl id="numberOfAnimals" onSubmit={handleFormSubmit}>
+            <FormControl id="numberOfAnimals">
               <FormLabel>Number of Animals: </FormLabel>
-              <Input type='number' defaultValue="1" id='numberOfAnimals' value={formState.numberOfAnimals} onChange={handleChange} />
+              <Input type='number' id='numberOfAnimals' value={formState.numberOfAnimals} onChange={handleChange} />
             </FormControl>
-
+            <FormControl id="speciesName">
                 <FormLabel>Species Name: </FormLabel>
                 <Input type='text' placeholder='Species Name' id='speciesName' value={formState.speciesName} onChange={handleChange} />
+            </FormControl>
+            <FormControl id="speciesAge">
                 <FormLabel>Approximate Age</FormLabel>
-                <Select colorScheme="black" value={formState.speciesAge} onChange={handleChange}>
-                  <option color="black" value="newborn">Newborn</option>
+                <Select placeholder="Select Age" value={formState.speciesAge} onChange={handleChange}>
+                  <option value="newborn">Newborn</option>
                   <option value="hatchling">Hatchling</option>
                   <option value="nestling">Nestling</option>
                   <option value="fledgling">Fledgling</option>
                   <option value="juvenile">Juvenile</option>
                   <option value="newborn">Adult</option>
                 </Select>
+            </FormControl>
+            <FormControl id="pickup">
                 <FormLabel> Was the animal brought to shelter or picked up by animal control? </FormLabel>
                 <RadioGroup defaultValue="ACPickup">
                   <HStack spacing="24px">
@@ -48,23 +51,32 @@ return (
                     <Radio value="ACPickup">AC Pickup</Radio>
                   </HStack>
                 </RadioGroup>
+            </FormControl>
+            <FormControl id="circumstance">
                 <FormLabel for="circumstance">Circumstance of Capture</FormLabel>
                 <Input type='text' id='circumstance' value={formState.circumstance} onChange={handleChange}/>
+            </FormControl>
+            <FormControl id="initObservations">
                 <FormLabel for="initObservations">Initial Observations</FormLabel>
                 <Input type='text' id='initObservations' value={formState.initObservations} onChange={handleChange}/>
-                {/* Enter Finders Information */}
+            </FormControl>
+            <FormControl id="finderName">
                 <FormLabel for="finderName">Name</FormLabel>
                 <Input type="text" id="finderName" value={formState.finderName} onChange={handleChange}/>
+            </FormControl>
+            <FormControl id="finderNumber">
                 <FormLabel for="finderNumber">Phone Number</FormLabel>
                 <Input type='number' id='finderNumber' value={formState.finderNumber} onChange={handleChange}/>
+            </FormControl>
+            <FormControl id="finderAddress">
                 <FormLabel for="finderAddress">Address</FormLabel>
                 <Input type='text' id='finderAddress' value={formState.finderAddress} onChange={handleChange}/>
+            </FormControl>
               <Button type="submit" variantColor="teal" variant="outline" width="full" mt={4}>
               Submit
             </Button>
             </Form> 
         </div>
-    </main>
 )
 }
 
