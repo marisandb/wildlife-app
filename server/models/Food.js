@@ -1,8 +1,8 @@
 const { Schema, model } = require("mongoose");
-const wildlifereordSchema = require("./Wildliferecord");
+// const wildlifereordSchema = require("./Wildliferecord");
 const dateFormat = require("../utils/dateFormat");
 
-const Food = new Schema({
+const foodSchema = new Schema({
   food: {
     type: String,
     required: "name of food",
@@ -18,7 +18,7 @@ const Food = new Schema({
     type: String,
     required: true,
   },
-  wildlifereord: [wildlifereordSchema],
+  // wildlifereord: [wildlifereordSchema],
 
   eatenAll: {
     type: String,
@@ -27,9 +27,9 @@ const Food = new Schema({
   timeEat: {
     type: String,
   },
-
-  toJSON: {
-    getters: true,
+  name: {
+    type: String,
+    timestamps: true,
   },
 });
 
@@ -37,6 +37,6 @@ foodSchema.virtual("wildliferecordCount").get(function () {
   return this.wildlifereord.length;
 });
 
-const Food = model("Food", FoodSchema);
+const Food = model("Foods", foodSchema);
 
 module.exports = Food;

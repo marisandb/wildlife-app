@@ -1,6 +1,6 @@
-const { AuthenticationError } = require('apollo-server-express');
-const { User, Thought } = require('../models');
-const { signToken } = require('../utils/auth');
+const { AuthenticationError } = require("apollo-server-express");
+const { User, Food } = require("../models");
+const { signToken } = require("../utils/auth");
 // graphql appolo server needs to be able to resolve these reqests.
 //needs to be able to query user--who is the client?
 const resolvers = {
@@ -8,38 +8,38 @@ const resolvers = {
     me: async (parent, args, context) => {
       if (context.user) {
         const userData = await User.findOne({ _id: context.user._id })
-        .select('-__v -password')
-        .populate('thoughts')
+          .select("-__v -password")
+          .populate("Foods");
         // .populate('friends'); // this model doesnt exist so no way to populate with this data
-        
+
         return userData;
       }
-      
-      throw new AuthenticationError('Not logged in');
+
+      throw new AuthenticationError("Not logged in");
     },
     //who are all the users?
     users: async () => {
-      return User.find()
-        .select('-__v -password')
-        .populate('thoughts')
-        // .populate('friends');
+      return User.find().select("-__v -password").populate("foods");
+      // .populate('friends');
     },
     // who is a specific user for login purposes--is the client
     user: async (parent, { username }) => {
-      return User.findOne({ username })
-        .select('-__v -password')
-        .populate('friends')
-        .populate('thoughts');
+      return (
+        User.findOne({ username })
+          .select("-__v -password")
+          // .populate("friends")
+          .populate("foods")
+      );
     },
-    //get all the thoughts of a user ordered recent to less recent
-    thoughts: async (parent, { username }) => {
+    //get all the foods of a user ordered recent to less recent
+    foods: async (parent, { username }) => {
       const params = username ? { username } : {};
-      return Thought.find(params).sort({ createdAt: -1 });
+      return Food.find(params).sort({ createdAt: -1 });
     },
-    // get specific thought
-    thought: async (parent, { _id }) => {
-      return Thought.findOne({ _id });
-    }
+    // get specific food
+    food: async (parent, { _id }) => {
+      return Food.findOne({ _id });
+    },
   },
 
   Mutation: {
@@ -53,60 +53,67 @@ const resolvers = {
       const user = await User.findOne({ email });
 
       if (!user) {
-        throw new AuthenticationError('Incorrect credentials');
+        throw new AuthenticationError("Incorrect credentials");
       }
 
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw new AuthenticationError('Incorrect credentials');
+        throw new AuthenticationError("Incorrect credentials");
       }
 
       const token = signToken(user);
       return { token, user };
     },
-    addThought: async (parent, args, context) => {
+    addFood: async (parent, args, context) => {
       if (context.user) {
-        const thought = await Thought.create({ ...args, username: context.user.username });
+        const food = await Food.create({
+          ...args,
+          username: context.user.username,
+        });
 
         await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $push: { thoughts: thought._id } },
+          { $push: { foods: food._id } },
           { new: true }
         );
 
-        return thought;
+        return food;
       }
 
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError("You need to be logged in!");
     },
-    addReaction: async (parent, { thoughtId, reactionBody }, context) => {
+    addReaction: async (parent, { foodId, reactionBody }, context) => {
       if (context.user) {
-        const updatedThought = await Thought.findOneAndUpdate(
-          { _id: thoughtId },
-          { $push: { reactions: { reactionBody, username: context.user.username } } },
+        const updatedFood = await Food.findOneAndUpdate(
+          { _id: foodId },
+          {
+            $push: {
+              reactions: { reactionBody, username: context.user.username },
+            },
+          },
           { new: true, runValidators: true }
         );
 
-        return updatedThought;
+        return updatedFood;
       }
 
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError("You need to be logged in!");
     },
-    addFriend: async (parent, { friendId }, context) => {
-      if (context.user) {
-        const updatedUser = await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $addToSet: { friends: friendId } },
-          { new: true }
-        ).populate('friends');
+    // addFriend: async (parent, { friendId }, context) => {
+    //   if (context.user) {
+    //     const updatedUser = await User.findOneAndUpdate(
+    //       { _id: context.user._id },
+    //       { $addToSet: { friends: friendId } },
+    //       { new: true }
+    //     ).populate("friends");
 
-        return updatedUser;
-      }
+    //     return updatedUser;
+    //   }
 
-      throw new AuthenticationError('You need to be logged in!');
-    }
-  }
+    //   throw new AuthenticationError("You need to be logged in!");
+    // },
+  },
 };
 
 module.exports = resolvers;

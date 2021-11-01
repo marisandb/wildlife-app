@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server-express');
+const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
   type User {
@@ -6,22 +6,22 @@ const typeDefs = gql`
     username: String
     email: String
     friendCount: Int
-    thoughts: [Thought]
+    foods: [Food]
     friends: [User]
   }
 
-  type Thought {
+  type Food {
     _id: ID
-    thoughtText: String
+    foodText: String
     createdAt: String
     username: String
-    reactionCount: Int
-    reactions: [Reaction]
+    wildliferecordCount: Int
+    wildliferecords: [Wildliferecord]
   }
 
-  type Reaction {
+  type Wildliferecord {
     _id: ID
-    reactionBody: String
+    wildliferecordBody: String
     createdAt: String
     username: String
   }
@@ -35,15 +35,15 @@ const typeDefs = gql`
     me: User
     users: [User]
     user(username: String!): User
-    thoughts(username: String): [Thought]
-    thought(_id: ID!): Thought
+    foods(username: String): [Food]
+    food(_id: ID!): Food
   }
 
   type Mutation {
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
-    addThought(thoughtText: String!): Thought
-    addReaction(thoughtId: ID!, reactionBody: String!): Thought
+    addFood(foodText: String!): Food
+    addWildliferecord(foodId: ID!, wildliferecordBody: String!): Food
     addFriend(friendId: ID!): User
   }
 `;
