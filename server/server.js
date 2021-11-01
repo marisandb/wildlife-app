@@ -1,17 +1,39 @@
-const express = require('express');
-const {AolloServer} = require('apollo-server-express');
-const path = require('path');
+require("dotenv").config();
+const express = require("express");
+const { ApolloServer } = require("apollo-server-express");
+const path = require("path");
 
-const {typeDefs, resolvers } = require('./schemas');
-const {authMiddleWare} = require('./utils/auth'); 
-const db = require('./config/connection')
+const { typeDefs, resolvers } = require("./schemas");
+const authMiddleware = require("./utils/auth");
+const db = require("./config/connection");
 //more stuff to be added in a second
-app.use(express.json());
-const server = new ApolloServer({ 
-    typeDefs, 
-    resolvers, 
+
+const PORT = process.env.PORT || 3001;
+const app = express();
+//creating a mini server that will be placed into our express app as a middleware
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: authMiddleware,
 });
-    server.listen().then(({ url }) => {
-        console.log(`🚀  Server ready at ${url}`);
-    });
-           
+
+server.applyMiddleware({ app });
+// we want url encoding
+app.use(express.urlencoded({ extended: false }));
+// neo needs to learn kung fu but really its json data
+app.use(express.json());
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../client/build")));
+}
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
+
+db.once("open", () => {
+  app.listen(PORT, () => {
+    console.log(`API server running on port ${PORT}!`);
+    console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
+  });
+});

@@ -54,4 +54,8 @@ const context ={
         const client = new MongoClient(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
         await client.connect();
         const db=client.db(DB_NAME);
-      
+        
+        
+        server.listen().then(({ url }) => {
+          console.log(`🚀  Server ready at ${url}`);
+      });  
