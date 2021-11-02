@@ -1,51 +1,70 @@
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
-  type User {
-    _id: ID
-    username: String
-    email: String
-    friendCount: Int
-    foods: [Food]
-    friends: [User]
+  type Mutation {
+    signUp(input: SignUpInput!): AuthUser!
+    signIn(input: SignInInput!): AuthUser!
+    addWildliferecord(content: String!): Wildliferecord
+    addAnimal(animalId: ID!, wildliferecordBody: String!): Animal
   }
 
-  type Food {
-    _id: ID
-    foodText: String
-    createdAt: String
+  input SignUpInput {
+    email: String!
+    password: String!
+    name: String!
+  }
+
+  input SignInInput {
+    email: String!
+    password: String!
+  }
+
+  type AuthUser {
+    user: User!
+    token: String!
+  }
+  type User {
+    id: ID!
+    name: String!
+    email: String!
     username: String
-    wildliferecordCount: Int
+    firstName: String
+    lastName: String
+  }
+
+  type Animal {
+    _id: ID!
+    datein: String!
+    datefound: String!
+    progress: Float!
+    title: String
     wildliferecords: [Wildliferecord]
+    speciesName: String!
+    circumstance: String
+    initObservations: String!
+    animaltype: String!
+    isCompleted: Boolean!
+    createdAt: String
+    animalsbody: String
+
+    users: [User!]!
+    animals: [Animal!]!
   }
 
   type Wildliferecord {
     _id: ID
-    wildliferecordBody: String
-    createdAt: String
+    content: String!
     username: String
+    createdAt: String
   }
 
-  type Auth {
-    token: ID!
-    user: User
-  }
+  # The "Query" type is special: it lists all of the available queries that
+  # clients can execute, along with the return type for each. In this
+  # case, the "books" query returns an array of zero or more Books (defined above).
 
   type Query {
-    me: User
-    users: [User]
-    user(username: String!): User
-    foods(username: String): [Food]
-    food(_id: ID!): Food
-  }
-
-  type Mutation {
-    login(email: String!, password: String!): Auth
-    addUser(username: String!, email: String!, password: String!): Auth
-    addFood(foodText: String!): Food
-    addWildliferecord(foodId: ID!, wildliferecordBody: String!): Food
-    addFriend(friendId: ID!): User
+    myAnimals: [Animal]!
+    getAnimal(id: ID!): Animal
   }
 `;
-
 module.exports = typeDefs;

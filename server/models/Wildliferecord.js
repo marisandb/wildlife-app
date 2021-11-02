@@ -1,7 +1,7 @@
 const { Schema } = require("mongoose");
 const dateFormat = require("../utils/dateFormat");
 
-const wildlifereordSchema = new Schema(
+const animalSchema = new Schema(
   {
     NewRecord: {
       type: String,
@@ -19,8 +19,21 @@ const wildlifereordSchema = new Schema(
     },
 
     animaltype: {
-      type: String,
+      type: Number,
       require: true,
+    },
+    speciesName: {
+      type: String,
+      required: true,
+
+      circumstance: {
+        type: String,
+      },
+      initObservations: {
+        type: String,
+        required: true,
+        maxlength: 280,
+      },
     },
   },
   {
@@ -30,4 +43,4 @@ const wildlifereordSchema = new Schema(
   }
 );
 
-module.exports = wildlifereordSchema;
+module.exports = animalSchema;

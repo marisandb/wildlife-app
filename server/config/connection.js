@@ -1,7 +1,12 @@
+const { MongoClient, ObjectId } = require("mongodb");
+const mongoose = require("mongoose");
 // require("dotenv").config();
 // console.log(require("dotenv").config());
-const mongoose = require("mongoose");
-// const { DB_URI, DB_NAME, JWT_SECERT } = process.env;
+
+// const dotenv = require("dotenv");
+// dotenv.config();
+
+const { DB_URI, DB_NAME, JWT_SECERT } = process.env;
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/wildlifeapp", {
   useNewUrlParser: true,
