@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {FormControl, FormLabel, Input, Select, RadioGroup, HStack, Radio, Button, Form} from "@chakra-ui/react"
+import {FormControl, FormLabel, Input, Select, RadioGroup, HStack, Radio, Button} from "@chakra-ui/react"
 
 const IntakeForm = () => {
     const [formState, setFormState] = useState({ numberOfAnimals: '', speciesName: '', speciesAge: '', pickup: '', circumstance:'', initObservations:'', finderName:'', finderNumber:'', finderAddress:''});
@@ -22,7 +22,7 @@ const IntakeForm = () => {
 return (
         <div>
             <h4> Intake Form </h4>
-            <Form onSubmit={handleFormSubmit}>  
+            <form onSubmit={handleFormSubmit}>  
               {/* Animal Intake information */}
             <FormControl id="numberOfAnimals">
               <FormLabel>Number of Animals: </FormLabel>
@@ -60,6 +60,7 @@ return (
                 <FormLabel for="initObservations">Initial Observations</FormLabel>
                 <Input type='text' id='initObservations' value={formState.initObservations} onChange={handleChange}/>
             </FormControl>
+            <h2> Finders Information </h2>
             <FormControl id="finderName">
                 <FormLabel for="finderName">Name</FormLabel>
                 <Input type="text" id="finderName" value={formState.finderName} onChange={handleChange}/>
@@ -75,7 +76,7 @@ return (
               <Button type="submit" variantColor="teal" variant="outline" width="full" mt={4}>
               Submit
             </Button>
-            </Form> 
+            </form> 
         </div>
 )
 }

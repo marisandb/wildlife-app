@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CarouselImages } from './carouselImages';
-import { Image, Button, ButtonGroup, Box} from "@chakra-ui/react"
+import { Image, Button, ButtonGroup, Box, VStack} from "@chakra-ui/react"
 
 
 const Carousel = ({ slides }) => {
@@ -21,6 +21,7 @@ const Carousel = ({ slides }) => {
 
   return (
     <Box display="flex" mt="2" alignItems="center">
+      <VStack>
       {CarouselImages.map((slide, index) => {
         return (
           <div
@@ -40,6 +41,7 @@ const Carousel = ({ slides }) => {
         <Button colorScheme="green" onClick={nextSlide}>Next Photo</Button>
         </ButtonGroup>
        </Box>
+       </VStack>
     </Box>
   );
 };
