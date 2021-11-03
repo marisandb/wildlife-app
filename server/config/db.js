@@ -17,24 +17,25 @@ console.log("MongoDB database connection established successfully")
 
 });
 
-client.listen(port, () =>{
+client.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 
-// });
+    // });
 
-const connectDB =async () => {
-    try {
-        (process.env.MONGO_URI,{
-            useNewUrlParser: true, 
-            useUnifiedTopology: true 
-        });
+    const connectDB = async () => {
+        try {
+            (process.env.MONGO_URI, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+            });
  
-console.log("MongoDB database connection established successfully");
-        }catch (error){
+            console.log("MongoDB database connection established successfully");
+        } catch (error) {
             console.error("MongoDB connection FAIL");
             process.exit(1);
         }
 
-}
+    }
 
-module.exports=connectDB;
+    module.exports = connectDB
+})
