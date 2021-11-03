@@ -1,16 +1,17 @@
-function About() {
-    return (
-        <section id='about'>
-            <div>
-                <h2>
-                    About Us
-                </h2>
-                <p>
-                    Lorum Ippsum blah blah blah.
-                </p>
-            </div>
-        </section>
-    );
-}
+// import "./App.css";
+// import About from "./pages/about";
+// import { ChakraProvider } from "@chakra-ui/react";
+// // import IntakeForm from './pages/addanimal';
 
-export default About;
+// function App() {
+//   return (
+//     <ChakraProvider>
+//       <div className="App">
+//         <About />
+//         {/* <IntakeForm/> */}
+//       </div>
+//     </ChakraProvider>
+//   );
+// }
+
+// export default App;

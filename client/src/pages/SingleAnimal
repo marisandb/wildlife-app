@@ -4,16 +4,16 @@ import { useParams } from "react-router-dom";
 // import WildliferecordList from "../components/WildliferecordList";
 
 import { useQuery } from "@apollo/react-hooks";
-import { QUERY_THOUGHT } from "../utils/queries";
+import { QUERY_ANIMAL } from "../utils/queries";
 
-const SingleThought = (props) => {
-  const { id: thoughtId } = useParams();
+const SingleAnimal = (props) => {
+  const { id: animalId } = useParams();
 
-  const { loading, data } = useQuery(QUERY_THOUGHT, {
-    variables: { id: thoughtId },
+  const { loading, data } = useQuery(QUERY_ANIMAL, {
+    variables: { id: animalId },
   });
 
-  const thought = data?.thought || {};
+  const animal = data?.animal || {};
 
   if (loading) {
     return <div>Loading...</div>;
@@ -24,19 +24,19 @@ const SingleThought = (props) => {
       <div className="card mb-3">
         <p className="card-header">
           <span style={{ fontWeight: 700 }} className="text-light">
-            {thought.username}
+            {animal.username}
           </span>
           {""}
-          thought on {thought.createdAt}
+          animal on {animal.createdAt}
         </p>
         <div className="card-body">
-          <p>{thought.thoughtText}</p>
+          <p>{animal.thoughtText}</p>
         </div>
       </div>
 
-      {/* {thought.wildliferecordCount > 0 && <WildliferecordList reactions={thought.wildliferecords} /> */}
+      {/* {animal.wildliferecordCount > 0 && <WildliferecordList reactions={animal.wildliferecords} /> */}
     </div>
   );
 };
 
-export default SingleThought;
+export default SingleAnimal;

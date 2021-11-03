@@ -1,11 +1,15 @@
+const faker = require("faker");
+
 const db = require("../config/connection");
-const { Wildliferecord, User } = require("../models");
+const { Animal, User } = require("../models");
+
 db.once("open", async () => {
-  // await Wildliferecord.deleteMany({});
-  // await User.deleteMany({});
+  await Animal.deleteMany({});
+  await User.deleteMany({});
 
   // create user data
   const userData = [];
+
   for (let i = 0; i < 50; i += 1) {
     const username = faker.internet.userName();
     const email = faker.internet.email(username);
@@ -16,44 +20,58 @@ db.once("open", async () => {
 
   const createdUsers = await User.collection.insertMany(userData);
 
-  let createdWildliferecords = [];
+  //   // create friends
+  //   for (let i = 0; i < 100; i += 1) {
+  //     const randomUserIndex = Math.floor(Math.random() * createdUsers.any.length);
+  //     const { _id: userId } = createdUsers.ops[randomUserIndex];
+
+  //     let friendId = userId;
+
+  //     while (friendId === userId) {
+  //       const randomUserIndex = Math.floor(
+  //         Math.random() * createdUsers.ops.length
+  //       );
+  //       friendId = createdUsers.ops[randomUserIndex];
+  //     }
+
+  //     await User.updateOne({ _id: userId }, { $addToSet: { friends: friendId } });
+  //   }
+
+  // create animals
+  let createdanimals = [];
   for (let i = 0; i < 100; i += 1) {
-    const WildliferecordText = faker.lorem.words(
-      Math.round(Math.random() * 20) + 1
-    );
+    const animalText = faker.lorem.words(Math.round(Math.random() * 20) + 1);
 
     const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
     const { username, _id: userId } = createdUsers.ops[randomUserIndex];
 
-    const createdWildliferecord = await Wildliferecord.create({
-      WildliferecordText,
-      username,
-    });
+    const createdanimal = await Animal.create({ animalText, username });
 
     const updatedUser = await User.updateOne(
       { _id: userId },
-      { $push: { Wildliferecords: createdWildliferecord._id } }
+      { $push: { animals: createdanimal._id } }
     );
 
-    createdWildliferecords.push(createdWildliferecord);
+    createdanimals.push(createdanimal);
   }
 
-  let createdThoughts = [];
+  // create reactions
   for (let i = 0; i < 100; i += 1) {
-    const thoughtText = faker.lorem.words(Math.round(Math.random() * 20) + 1);
+    const reactionBody = faker.lorem.words(Math.round(Math.random() * 20) + 1);
 
     const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
-    const { username, _id: userId } = createdUsers.ops[randomUserIndex];
+    const { username } = createdUsers.ops[randomUserIndex];
 
-    const createdThought = await Thought.create({ thoughtText, username });
+    const randomanimalIndex = Math.floor(Math.random() * createdanimals.length);
+    const { _id: animalId } = createdanimals[randomanimalIndex];
 
-    const updatedUser = await User.updateOne(
-      { _id: userId },
-      { $push: { thoughts: createdThought._id } }
+    await Animal.updateOne(
+      { _id: animalId },
+      { $push: { reactions: { reactionBody, username } } },
+      { runValidators: true }
     );
-
-    createdThoughts.push(createdThought);
   }
+
   console.log("all done!");
   process.exit(0);
 });

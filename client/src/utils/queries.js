@@ -1,40 +1,38 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
-export const QUERY_THOUGHTS = gql`
-  query thoughts($username: String) {
-    thoughts(username: $username) {
+export const QUERY_ANIMAL = gql`
+  query animal($title: String) {
+    animals(title: $title) {
       _id
-      thoughtText
       createdAt
       username
-      reactionCount
-      reactions {
+      wildliferecord {
         _id
         createdAt
         username
-        reactionBody
+        wildliferecordbody
       }
     }
   }
 `;
 
-export const QUERY_THOUGHT = gql`
-  query thought($id: ID!) {
-    thought(_id: $id) {
-      _id
-      thoughtText
-      createdAt
-      username
-      reactionCount
-      reactions {
-        _id
-        createdAt
-        username
-        reactionBody
-      }
-    }
-  }
-`;
+// export const QUERY_WILDLIFERECORD = gql`
+//   query wildliferecord($id: ID!) {
+//     wildliferecord(_id: $id) {
+//       _id
+//       thoughtText
+//       createdAt
+//       username
+//       reactionCount
+//       reactions {
+//         _id
+//         createdAt
+//         username
+//         reactionBody
+//       }
+//     }
+//   }
+// `;
 
 export const QUERY_USER = gql`
   query user($username: String!) {
@@ -42,16 +40,16 @@ export const QUERY_USER = gql`
       _id
       username
       email
-      friendCount
-      friends {
+      wildliferecord {
         _id
-        username
-      }
-      thoughts {
-        _id
-        thoughtText
+        content
         createdAt
-        reactionCount
+        wildliferecordbody
+        animal {
+        _id
+        wildliferecords
+        createdAt
+        wildliferecordbody
       }
     }
   }
