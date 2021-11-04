@@ -8,7 +8,7 @@ require("dotenv").config();
 
 // const { DB_URI, DB_NAME, JWT_SECERT } = process.env;
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/wildlifeapp", {
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:28015", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   // useCreateIndex: true,
