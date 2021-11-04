@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Carousel from "../components/carousel";
 import { CarouselImages } from "../components/carouselImages";
 import { Button, Heading, Box, HStack, SimpleGrid, Container } from "@chakra-ui/react"
@@ -32,5 +33,22 @@ function About() {
         </section>
     );
 }
+=======
+// import "./App.css";
+// import About from "./pages/about";
+// import { ChakraProvider } from "@chakra-ui/react";
+// // import IntakeForm from './pages/addanimal';
+>>>>>>> origin/clarissa
 
-export default About;
+// function App() {
+//   return (
+//     <ChakraProvider>
+//       <div className="App">
+//         <About />
+//         {/* <IntakeForm/> */}
+//       </div>
+//     </ChakraProvider>
+//   );
+// }
+
+// export default App;
